@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SpecsRadar — Smartphone Specifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--card:#13131a;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0f0f5;--muted:#8888aa;--hint:#55556a;--accent:#4fffb0;--accent2:#00c8ff;--danger:#ff6b6b;--fn:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--r:12px}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,255,176,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(79,255,176,.025) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-family:var(--fn);font-size:20px;font-weight:800;letter-spacing:-.5px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent);animation:blink 2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  .nav-pill{font-size:12px;color:var(--muted);border:1px solid var(--border2);padding:4px 13px;border-radius:99px}
+  .hero{position:relative;z-index:1;text-align:center;padding:5.5rem 2rem 3.5rem;max-width:700px;margin:0 auto}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(79,255,176,.28);background:rgba(79,255,176,.06);padding:5px 14px;border-radius:99px;margin-bottom:1.4rem;animation:fu .6s ease both}
+  .hero h1{font-family:var(--fn);font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:.9rem;animation:fu .6s .1s ease both}
+  .hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero p{font-size:1rem;color:var(--muted);font-weight:300;max-width:440px;margin:0 auto 2.2rem;animation:fu .6s .2s ease both}
+  @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .search-wrap{animation:fu .6s .3s ease both;max-width:540px;margin:0 auto;position:relative}
+  .search-box{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:6px 6px 6px 18px;gap:8px;transition:border-color .2s,box-shadow .2s}
+  .search-box:focus-within{border-color:rgba(79,255,176,.4);box-shadow:0 0 0 3px rgba(79,255,176,.07)}
+  .si{color:var(--muted);flex-shrink:0;font-size:17px}
+  .search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--fb);font-size:15px;min-width:0}
+  .search-box input::placeholder{color:var(--hint)}
+  .search-btn{background:var(--accent);color:#040f07;border:none;border-radius:8px;padding:10px 18px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s,transform .1s;letter-spacing:.03em}
+  .search-btn:hover{opacity:.88;transform:translateY(-1px)}
+  .search-btn:active{transform:scale(.98)}
+  .dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;z-index:200;display:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  .dropdown.open{display:block}
+  .dd-item{padding:.7rem 1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);transition:background .12s}
+  .dd-item:last-child{border-bottom:none}
+  .dd-item:hover,.dd-item.hi{background:rgba(79,255,176,.06)}
+  .dd-name{font-size:14px;color:var(--text)}
+  .dd-meta{font-size:12px;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:.9rem}
+  .chip{font-size:12px;color:var(--muted);border:1px solid var(--border);background:var(--bg3);padding:4px 12px;border-radius:99px;cursor:pointer;transition:all .15s}
+  .chip:hover{color:var(--accent);border-color:rgba(79,255,176,.3)}
+  .status{text-align:center;font-size:13px;color:var(--muted);min-height:18px;margin:1.4rem auto 0;max-width:540px;position:relative;z-index:1}
+  .status.err{color:var(--danger)}
+  .results{position:relative;z-index:1;max-width:800px;margin:2.5rem auto 6rem;padding:0 2rem}
+  .rcard{background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;animation:fu .4s ease both}
+  .rcard-hdr{padding:1.4rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,rgba(79,255,176,.04),rgba(0,200,255,.03))}
+  .dev-ico{width:50px;height:50px;border-radius:11px;background:rgba(79,255,176,.09);border:1px solid rgba(79,255,176,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+  .rcard-hdr h2{font-family:var(--fn);font-size:1.2rem;font-weight:700;color:var(--text);letter-spacing:-.3px}
+  .rcard-hdr .meta{font-size:13px;color:var(--muted);margin-top:2px}
+  .sgrid{display:grid;grid-template-columns:1fr 1fr}
+  @media(max-width:520px){.sgrid{grid-template-columns:1fr}}
+  .spec{padding:.85rem 1.4rem;border-bottom:1px solid var(--border);border-right:1px solid var(--border);transition:background .13s}
+  .spec:hover{background:rgba(255,255,255,.02)}
+  .spec:nth-child(even){border-right:none}
+  .spec:last-child{border-bottom:none}
+  .spec:nth-last-child(2):nth-child(odd){border-bottom:none}
+  .slabel{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.75;margin-bottom:3px}
+  .sval{font-size:14px;color:var(--text);line-height:1.4}
+  .sk{background:linear-gradient(90deg,var(--bg3) 25%,rgba(255,255,255,.04) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:4px}
+  @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .empty{text-align:center;padding:4.5rem 2rem;color:var(--muted)}
+  .empty-ico{font-size:44px;margin-bottom:.9rem;opacity:.35}
+  .empty h3{font-family:var(--fn);font-size:1.15rem;color:var(--text);margin-bottom:.4rem}
+  .empty p{font-size:14px;max-width:300px;margin:0 auto}
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.8rem 2rem;text-align:center;font-size:13px;color:var(--muted)}
+  footer span{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#"><span class="logo-dot"></span>SpecsRadar</a>
+  <span class="nav-pill">Free · No API key needed</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">📡 Instant Specs Lookup</div>
+  <h1>Every spec.<br><span>Any smartphone.</span></h1>
+  <p>Search any smartphone and instantly see its full technical specifications. Completely free — no API key required.</p>
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="si">🔍</span>
+      <input type="text" id="inp" placeholder="e.g. Samsung Galaxy A36, iPhone 16 Pro..." autocomplete="off" />
+      <button class="search-btn" onclick="doSearch()">Search</button>
+    </div>
+    <div class="dropdown" id="dd"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<div class="status" id="status"></div>
+<section class="results"><div id="result">
+  <div class="empty">
+    <div class="empty-ico">📱</div>
+    <h3>Search for a smartphone</h3>
+    <p>Type a model name above to view its full specifications.</p>
+  </div>
+</div></section>
+
+<footer>Built with <span>SpecsRadar</span> · Local database · Works offline once running</footer>
+
+<script>
+const inp=document.getElementById('inp'),ddEl=document.getElementById('dd'),resultEl=document.getElementById('result'),statusEl=document.getElementById('status'),chipsEl=document.getElementById('chips');
+let ddItems=[],ddIdx=-1;
+
+fetch('/api/brands').then(r=>r.json()).then(brands=>{
+  chipsEl.innerHTML=brands.slice(0,8).map(b=>`<span class="chip" onclick="quickSearch('${b}')">${b}</span>`).join('');
+});
+
+function quickSearch(q){inp.value=q;fetchSugg(q);}
+
+let tmr;
+inp.addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(()=>fetchSugg(inp.value),180);});
+inp.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){ddIdx=Math.min(ddIdx+1,ddItems.length-1);renderDd();e.preventDefault();}
+  else if(e.key==='ArrowUp'){ddIdx=Math.max(ddIdx-1,0);renderDd();e.preventDefault();}
+  else if(e.key==='Enter'){ddIdx>=0&&ddItems[ddIdx]?selectPhone(ddItems[ddIdx]):doSearch();}
+  else if(e.key==='Escape')closeDd();
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))closeDd();});
+
+async function fetchSugg(q){
+  if(!q||q.length<2){closeDd();return;}
+  try{const r=await fetch('/api/search?q='+encodeURIComponent(q));ddItems=await r.json();ddIdx=-1;renderDd();}catch{}
+}
+
+function renderDd(){
+  if(!ddItems.length){closeDd();return;}
+  ddEl.innerHTML=ddItems.map((p,i)=>`<div class="dd-item${i===ddIdx?' hi':''}" onclick='selectPhone(${JSON.stringify(p)})'><span class="dd-name">${p.name}</span><span class="dd-meta">${p.brand} · ${p.year}</span></div>`).join('');
+  ddEl.classList.add('open');
+}
+function closeDd(){ddEl.classList.remove('open');ddItems=[];ddIdx=-1;}
+
+function selectPhone(p){
+  if(typeof p==='string')p=JSON.parse(p);
+  inp.value=p.name;closeDd();renderSpecs(p);statusEl.textContent='';
+}
+
+async function doSearch(){
+  const q=inp.value.trim();
+  if(!q){statusEl.textContent='Please enter a model name.';statusEl.className='status err';return;}
+  statusEl.textContent='Searching…';statusEl.className='status';
+  closeDd();showSkeleton();
+  try{
+    const r=await fetch('/api/search?q='+encodeURIComponent(q));
+    const phones=await r.json();
+    if(!phones.length){
+      statusEl.textContent='No results found. Try a different model name.';statusEl.className='status err';
+      resultEl.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><h3>No results for "${q}"</h3><p>Try including the brand, e.g. "Samsung Galaxy A36".</p></div>`;
+    }else{
+      statusEl.textContent=phones.length>1?`Showing best match · ${phones.length} results found`:'';statusEl.className='status';
+      renderSpecs(phones[0]);
+    }
+  }catch{statusEl.textContent='Error. Is the server running?';statusEl.className='status err';}
+}
+
+function showSkeleton(){
+  const f=['Display Type','Resolution','Size','Rear Camera','Front Camera','Chipset','RAM','Storage','Card Slot','OS','Battery','Connectivity'];
+  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><div class="sk" style="height:18px;width:200px;margin-bottom:7px"></div><div class="sk" style="height:12px;width:110px"></div></div></div><div class="sgrid">${f.map(()=>`<div class="spec"><div class="sk" style="height:10px;width:70px;margin-bottom:6px"></div><div class="sk" style="height:14px;width:${60+Math.floor(Math.random()*35)}%"></div></div>`).join('')}</div></div>`;
+}
+
+function renderSpecs(p){
+  const rows=[['Display Type',p.display_type],['Resolution',p.resolution],['Size',p.screen_size],['Rear Camera',p.rear_camera],['Front Camera',p.front_camera],['Chipset',p.chipset],['RAM',p.ram],['Storage',p.storage],['Card Slot',p.card_slot],['Operating System',p.os],['Battery Capacity',p.battery],['Connectivity',p.connectivity]];
+  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><h2>${p.name}</h2><div class="meta">${p.brand} · Released ${p.year}</div></div></div><div class="sgrid">${rows.map(([l,v])=>`<div class="spec"><div class="slabel">${l}</div><div class="sval">${v||'—'}</div></div>`).join('')}</div></div>`;
+}
+</script>
+</body>
+</html>
