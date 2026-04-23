@@ -233,7 +233,8 @@ function renderSpecs(p){
     const val = type==='storage' ? formatStorage(v) : `<div class="sval">${v||'—'}</div>`;
     return `<div class="spec"><div class="slabel">${l}</div>${val}</div>`;
   }).join('');
-  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><h2>${p.name}</h2><div class="meta">${p.brand} · Released ${p.year}</div></div></div><div class="sgrid">${cells}</div></div>`;
+  const printUrl='/print.html?phone='+encodeURIComponent(p.name);
+  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div style="flex:1"><h2>${p.name}</h2><div class="meta">${p.brand} · Released ${p.year}</div></div><a href="${printUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(79,255,176,0.1);border:1px solid rgba(79,255,176,0.3);color:#4fffb0;font-family:var(--fn);font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0">🖨 Print Sheet</a></div></div><div class="sgrid">${cells}</div></div>`;
 }
 </script>
 </body>
