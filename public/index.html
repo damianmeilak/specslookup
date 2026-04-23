@@ -24,8 +24,11 @@
   .hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .hero p{font-size:1rem;color:var(--muted);font-weight:300;max-width:440px;margin:0 auto 2.2rem;animation:fu .6s .2s ease both}
   @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* search area — overflow visible so dropdown isn't clipped */
   .search-wrap{animation:fu .6s .3s ease both;max-width:540px;margin:0 auto;position:relative}
-  .search-box{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:6px 6px 6px 18px;gap:8px;transition:border-color .2s,box-shadow .2s}
+  .hero{overflow:visible}
+  .search-box{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:6px 6px 6px 18px;gap:8px;transition:border-color .2s,box-shadow .2s;position:relative;z-index:300}
   .search-box:focus-within{border-color:rgba(79,255,176,.4);box-shadow:0 0 0 3px rgba(79,255,176,.07)}
   .si{color:var(--muted);flex-shrink:0;font-size:17px}
   .search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--fb);font-size:15px;min-width:0}
@@ -33,16 +36,21 @@
   .search-btn{background:var(--accent);color:#040f07;border:none;border-radius:8px;padding:10px 18px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s,transform .1s;letter-spacing:.03em}
   .search-btn:hover{opacity:.88;transform:translateY(-1px)}
   .search-btn:active{transform:scale(.98)}
-  .dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;z-index:200;display:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+
+  /* dropdown — fixed position so it always appears above everything */
+  .dropdown{position:fixed;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;z-index:9999;display:none;box-shadow:0 12px 40px rgba(0,0,0,.7);max-height:320px;overflow-y:auto}
   .dropdown.open{display:block}
-  .dd-item{padding:.7rem 1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);transition:background .12s}
+  .dd-item{padding:.75rem 1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);transition:background .12s;gap:12px}
   .dd-item:last-child{border-bottom:none}
-  .dd-item:hover,.dd-item.hi{background:rgba(79,255,176,.06)}
-  .dd-name{font-size:14px;color:var(--text)}
-  .dd-meta{font-size:12px;color:var(--muted)}
+  .dd-item:hover,.dd-item.hi{background:rgba(79,255,176,.07)}
+  .dd-name{font-size:14px;color:var(--text);flex:1}
+  .dd-meta{font-size:12px;color:var(--muted);white-space:nowrap}
+  .dd-badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#040f07;background:var(--accent);padding:2px 7px;border-radius:99px;white-space:nowrap}
+
   .chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:.9rem}
   .chip{font-size:12px;color:var(--muted);border:1px solid var(--border);background:var(--bg3);padding:4px 12px;border-radius:99px;cursor:pointer;transition:all .15s}
   .chip:hover{color:var(--accent);border-color:rgba(79,255,176,.3)}
+
   .status{text-align:center;font-size:13px;color:var(--muted);min-height:18px;margin:1.4rem auto 0;max-width:540px;position:relative;z-index:1}
   .status.err{color:var(--danger)}
   .results{position:relative;z-index:1;max-width:800px;margin:2.5rem auto 6rem;padding:0 2rem}
@@ -60,6 +68,9 @@
   .spec:nth-last-child(2):nth-child(odd){border-bottom:none}
   .slabel{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.75;margin-bottom:3px}
   .sval{font-size:14px;color:var(--text);line-height:1.4}
+  /* storage pills */
+  .storage-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .storage-pill{font-size:12px;font-weight:500;color:var(--accent);border:1px solid rgba(79,255,176,.3);background:rgba(79,255,176,.06);padding:2px 10px;border-radius:99px}
   .sk{background:linear-gradient(90deg,var(--bg3) 25%,rgba(255,255,255,.04) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:4px}
   @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
   .empty{text-align:center;padding:4.5rem 2rem;color:var(--muted)}
@@ -81,16 +92,18 @@
   <div class="hero-tag">📡 Instant Specs Lookup</div>
   <h1>Every spec.<br><span>Any smartphone.</span></h1>
   <p>Search any smartphone and instantly see its full technical specifications. Completely free — no API key required.</p>
-  <div class="search-wrap">
-    <div class="search-box">
+  <div class="search-wrap" id="searchWrap">
+    <div class="search-box" id="searchBox">
       <span class="si">🔍</span>
       <input type="text" id="inp" placeholder="e.g. Samsung Galaxy A36, iPhone 16 Pro..." autocomplete="off" />
       <button class="search-btn" onclick="doSearch()">Search</button>
     </div>
-    <div class="dropdown" id="dd"></div>
     <div class="chips" id="chips"></div>
   </div>
 </section>
+
+<!-- dropdown rendered outside hero so it's never clipped -->
+<div class="dropdown" id="dd"></div>
 
 <div class="status" id="status"></div>
 <section class="results"><div id="result">
@@ -101,43 +114,72 @@
   </div>
 </div></section>
 
-<footer>Built with <span>SpecsRadar</span> · Local database · Works offline once running</footer>
+<footer>Built with <span>SpecsRadar</span> · Free · No API key needed</footer>
 
 <script>
-const inp=document.getElementById('inp'),ddEl=document.getElementById('dd'),resultEl=document.getElementById('result'),statusEl=document.getElementById('status'),chipsEl=document.getElementById('chips');
+const inp=document.getElementById('inp');
+const ddEl=document.getElementById('dd');
+const searchBox=document.getElementById('searchBox');
+const resultEl=document.getElementById('result');
+const statusEl=document.getElementById('status');
+const chipsEl=document.getElementById('chips');
 let ddItems=[],ddIdx=-1;
+
+// Position dropdown under search box using fixed coords
+function positionDd(){
+  const r=searchBox.getBoundingClientRect();
+  ddEl.style.top=(r.bottom+6)+'px';
+  ddEl.style.left=r.left+'px';
+  ddEl.style.width=r.width+'px';
+}
+
+window.addEventListener('resize',()=>{ if(ddEl.classList.contains('open')) positionDd(); });
+window.addEventListener('scroll',()=>{ if(ddEl.classList.contains('open')) positionDd(); },true);
 
 fetch('/api/brands').then(r=>r.json()).then(brands=>{
   chipsEl.innerHTML=brands.slice(0,8).map(b=>`<span class="chip" onclick="quickSearch('${b}')">${b}</span>`).join('');
 });
 
-function quickSearch(q){inp.value=q;fetchSugg(q);}
+function quickSearch(q){inp.value=q;inp.focus();fetchSugg(q);}
 
 let tmr;
-inp.addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(()=>fetchSugg(inp.value),180);});
+inp.addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(()=>fetchSugg(inp.value),160);});
 inp.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown'){ddIdx=Math.min(ddIdx+1,ddItems.length-1);renderDd();e.preventDefault();}
   else if(e.key==='ArrowUp'){ddIdx=Math.max(ddIdx-1,0);renderDd();e.preventDefault();}
   else if(e.key==='Enter'){ddIdx>=0&&ddItems[ddIdx]?selectPhone(ddItems[ddIdx]):doSearch();}
   else if(e.key==='Escape')closeDd();
 });
-document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))closeDd();});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#searchBox')&&!e.target.closest('#dd'))closeDd();
+});
 
 async function fetchSugg(q){
   if(!q||q.length<2){closeDd();return;}
-  try{const r=await fetch('/api/search?q='+encodeURIComponent(q));ddItems=await r.json();ddIdx=-1;renderDd();}catch{}
+  try{
+    const r=await fetch('/api/search?q='+encodeURIComponent(q));
+    ddItems=await r.json();
+    ddIdx=-1;
+    renderDd();
+  }catch{}
 }
 
 function renderDd(){
   if(!ddItems.length){closeDd();return;}
-  ddEl.innerHTML=ddItems.map((p,i)=>`<div class="dd-item${i===ddIdx?' hi':''}" onclick='selectPhone(${JSON.stringify(p)})'><span class="dd-name">${p.name}</span><span class="dd-meta">${p.brand} · ${p.year}</span></div>`).join('');
+  positionDd();
+  ddEl.innerHTML=ddItems.map((p,i)=>{
+    const badge = i===0 ? '<span class="dd-badge">Best match</span>' : '';
+    return `<div class="dd-item${i===ddIdx?' hi':''}" onclick='selectPhone(${JSON.stringify(p).replace(/'/g,"\\'")})'>${badge}<span class="dd-name">${p.name}</span><span class="dd-meta">${p.brand} · ${p.year}</span></div>`;
+  }).join('');
   ddEl.classList.add('open');
 }
+
 function closeDd(){ddEl.classList.remove('open');ddItems=[];ddIdx=-1;}
 
 function selectPhone(p){
   if(typeof p==='string')p=JSON.parse(p);
   inp.value=p.name;closeDd();renderSpecs(p);statusEl.textContent='';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 async function doSearch(){
@@ -152,10 +194,11 @@ async function doSearch(){
       statusEl.textContent='No results found. Try a different model name.';statusEl.className='status err';
       resultEl.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><h3>No results for "${q}"</h3><p>Try including the brand, e.g. "Samsung Galaxy A36".</p></div>`;
     }else{
-      statusEl.textContent=phones.length>1?`Showing best match · ${phones.length} results found`:'';statusEl.className='status';
+      statusEl.textContent=phones.length>1?`Best match shown · ${phones.length} results found`:'';
+      statusEl.className='status';
       renderSpecs(phones[0]);
     }
-  }catch{statusEl.textContent='Error. Is the server running?';statusEl.className='status err';}
+  }catch{statusEl.textContent='Connection error. Please try again.';statusEl.className='status err';}
 }
 
 function showSkeleton(){
@@ -163,9 +206,34 @@ function showSkeleton(){
   resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><div class="sk" style="height:18px;width:200px;margin-bottom:7px"></div><div class="sk" style="height:12px;width:110px"></div></div></div><div class="sgrid">${f.map(()=>`<div class="spec"><div class="sk" style="height:10px;width:70px;margin-bottom:6px"></div><div class="sk" style="height:14px;width:${60+Math.floor(Math.random()*35)}%"></div></div>`).join('')}</div></div>`;
 }
 
+function formatStorage(raw){
+  if(!raw) return '—';
+  // Split by common separators: comma, slash, pipe, or " / "
+  const parts = raw.split(/[,\/|]/).map(s=>s.trim()).filter(Boolean);
+  if(parts.length<=1) return `<div class="storage-pills"><span class="storage-pill">${raw}</span></div>`;
+  return `<div class="storage-pills">${parts.map(p=>`<span class="storage-pill">${p}</span>`).join('')}</div>`;
+}
+
 function renderSpecs(p){
-  const rows=[['Display Type',p.display_type],['Resolution',p.resolution],['Size',p.screen_size],['Rear Camera',p.rear_camera],['Front Camera',p.front_camera],['Chipset',p.chipset],['RAM',p.ram],['Storage',p.storage],['Card Slot',p.card_slot],['Operating System',p.os],['Battery Capacity',p.battery],['Connectivity',p.connectivity]];
-  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><h2>${p.name}</h2><div class="meta">${p.brand} · Released ${p.year}</div></div></div><div class="sgrid">${rows.map(([l,v])=>`<div class="spec"><div class="slabel">${l}</div><div class="sval">${v||'—'}</div></div>`).join('')}</div></div>`;
+  const rows=[
+    ['Display Type',p.display_type,'text'],
+    ['Resolution',p.resolution,'text'],
+    ['Size',p.screen_size,'text'],
+    ['Rear Camera',p.rear_camera,'text'],
+    ['Front Camera',p.front_camera,'text'],
+    ['Chipset',p.chipset,'text'],
+    ['RAM',p.ram,'text'],
+    ['Storage',p.storage,'storage'],
+    ['Card Slot',p.card_slot,'text'],
+    ['Operating System',p.os,'text'],
+    ['Battery Capacity',p.battery,'text'],
+    ['Connectivity',p.connectivity,'text'],
+  ];
+  const cells=rows.map(([l,v,type])=>{
+    const val = type==='storage' ? formatStorage(v) : `<div class="sval">${v||'—'}</div>`;
+    return `<div class="spec"><div class="slabel">${l}</div>${val}</div>`;
+  }).join('');
+  resultEl.innerHTML=`<div class="rcard"><div class="rcard-hdr"><div class="dev-ico">📱</div><div><h2>${p.name}</h2><div class="meta">${p.brand} · Released ${p.year}</div></div></div><div class="sgrid">${cells}</div></div>`;
 }
 </script>
 </body>
